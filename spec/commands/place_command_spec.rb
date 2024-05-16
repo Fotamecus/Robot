@@ -44,6 +44,12 @@ RSpec.describe Commands::PlaceCommand do
 
         place_command_execute
       end
+
+      it 'outputs a message' do
+        expect(STDOUT).to receive(:puts).with('Position out of bounds')
+
+        place_command_execute
+      end
     end
   end
 end

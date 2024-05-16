@@ -7,7 +7,10 @@ module Commands
     end
 
     def execute(robot, table)
-      return unless table.within_bounds?(@x, @y)
+      unless table.within_bounds?(@x, @y)
+        puts 'Position out of bounds'
+        return
+      end
 
       robot.place(@x, @y, @direction)
     end
