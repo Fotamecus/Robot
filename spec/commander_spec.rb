@@ -67,10 +67,34 @@ RSpec.describe Commander do
     subject(:parse_command) { commander.send(:parse_command, command_string) }
 
     context 'when the command is PLACE' do
-      let(:command_string) { 'PLACE 0,0,NORTH' }
+      before { allow(commander).to receive(:valid_place_args?).and_return(true) }
 
-      it 'returns a PlaceCommand instance' do
-        expect(parse_command).to be_a(Commands::PlaceCommand)
+      context 'when the command has more than one part' do
+        let(:command_string) { 'PLACE 0,0,NORTH' }
+
+        it 'calls the valid_place_args? method' do
+          expect(commander).to receive(:valid_place_args?).with('0', '0', 'NORTH')
+
+          parse_command
+        end
+
+        it 'returns a PlaceCommand instance' do
+          expect(parse_command).to be_a(Commands::PlaceCommand)
+        end
+      end
+
+      context 'when the command has only one part' do
+        let(:command_string) { 'PLACE' }
+
+        it 'does not call the valid_place_args? method' do
+          expect(commander).not_to receive(:valid_place_args?)
+
+          parse_command
+        end
+
+        it 'returns nil' do
+          expect(parse_command).to be_nil
+        end
       end
     end
 
@@ -111,6 +135,53 @@ RSpec.describe Commander do
 
       it 'returns nil' do
         expect(parse_command).to be_nil
+      end
+    end
+  end
+
+  describe '#valid_place_args?' do
+    subject(:valid_place_args?) { commander.send(:valid_place_args?, x, y, direction) }
+
+    context 'when the x argument is valid' do
+      let(:x) { '0' }
+
+      context 'when the y argument is valid' do
+        let(:y) { '0' }
+
+        context 'when the direction argument is valid' do
+          let(:direction) { 'NORTH' }
+
+          it 'returns true' do
+            expect(valid_place_args?).to be true
+          end
+        end
+
+        context 'when the direction argument is invalid' do
+          let(:direction) { 'INVALID' }
+
+          it 'returns false' do
+            expect(valid_place_args?).to be false
+          end
+        end
+      end
+
+      context 'when the y argument is invalid' do
+        let(:y) { 'INVALID' }
+        let(:direction) { 'NORTH' }
+
+        it 'returns false' do
+          expect(valid_place_args?).to be false
+        end
+      end
+    end
+
+    context 'when the x argument is invalid' do
+      let(:x) { 'INVALID' }
+      let(:y) { '0' }
+      let(:direction) { 'NORTH' }
+
+      it 'returns false' do
+        expect(valid_place_args?).to be false
       end
     end
   end

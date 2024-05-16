@@ -19,7 +19,12 @@ class Commander
     parts = command_string.split
     case parts[0]
     when 'PLACE'
+      return nil unless parts[1]
+
       x, y, direction = parts[1].split(',')
+
+      return unless valid_place_args?(x, y, direction)
+
       Commands::PlaceCommand.new(x.to_i, y.to_i, direction)
     when 'MOVE'
       Commands::MoveCommand.new
@@ -32,5 +37,15 @@ class Commander
     else
       nil
     end
+  end
+
+  def valid_place_args?(x, y, direction)
+    return false if x.nil? || (false if Float(x) rescue true)
+
+    return false if y.nil? || (false if Float(y) rescue true)
+
+    return false if direction.nil? || !Robot::DIRECTIONS.include?(direction.to_sym)
+
+    true
   end
 end
