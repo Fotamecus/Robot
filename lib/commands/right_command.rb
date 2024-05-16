@@ -1,7 +1,10 @@
 module Commands
   class RightCommand < BaseCommand
     def execute(robot, _table)
-      return unless robot.placed?
+      unless robot.placed?
+        puts 'Robot has not been placed'
+        return
+      end
 
       robot.right
     end

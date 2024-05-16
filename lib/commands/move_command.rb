@@ -1,10 +1,17 @@
 module Commands
   class MoveCommand < BaseCommand
     def execute(robot, table)
-      return unless robot.placed?
+      unless robot.placed?
+        puts 'Robot has not been placed'
+        return
+      end
 
       new_x, new_y = next_position(robot)
-      robot.move if table.within_bounds?(new_x, new_y)
+      if table.within_bounds?(new_x, new_y)
+        robot.move
+      else
+        puts 'Move out of bounds'
+      end
     end
 
     private

@@ -26,6 +26,12 @@ RSpec.describe Commands::RightCommand do
 
         right_command_execute
       end
+
+      it 'outputs a message' do
+        expect(STDOUT).to receive(:puts).with('Robot has not been placed')
+
+        right_command_execute
+      end
     end
   end
 end

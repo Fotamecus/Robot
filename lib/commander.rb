@@ -19,7 +19,10 @@ class Commander
     parts = command_string.split
     case parts[0]
     when 'PLACE'
-      return nil unless parts[1]
+      if parts.length < 2
+        puts 'Invalid PLACE command - expected arguments: PLACE X,Y,DIRECTION'
+        return nil
+      end
 
       x, y, direction = parts[1].split(',')
 
@@ -35,16 +38,26 @@ class Commander
     when 'REPORT'
       Commands::ReportCommand.new
     else
+      puts "Invalid command: #{command_string}"
       nil
     end
   end
 
   def valid_place_args?(x, y, direction)
-    return false if x.nil? || (false if Float(x) rescue true)
+    if x.nil? || (false if Float(x) rescue true)
+      puts "Invalid x argument: #{x}"
+      return false
+    end
 
-    return false if y.nil? || (false if Float(y) rescue true)
+    if y.nil? || (false if Float(y) rescue true)
+      puts "Invalid y argument: #{y}"
+      return false
+    end
 
-    return false if direction.nil? || !Robot::DIRECTIONS.include?(direction.to_sym)
+    if direction.nil? || !Robot::DIRECTIONS.include?(direction.to_sym)
+      puts "Invalid direction argument: #{direction}"
+      return false
+    end
 
     true
   end

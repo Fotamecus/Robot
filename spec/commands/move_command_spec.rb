@@ -29,12 +29,24 @@ RSpec.describe Commands::MoveCommand do
 
           move_command_execute
         end
+
+        it 'outputs a message' do
+          expect(STDOUT).to receive(:puts).with('Move out of bounds')
+
+          move_command_execute
+        end
       end
     end
 
     context 'when the robot is not placed' do
       it 'does not move the robot' do
         expect(robot).not_to receive(:move)
+
+        move_command_execute
+      end
+
+      it 'outputs a message' do
+        expect(STDOUT).to receive(:puts).with('Robot has not been placed')
 
         move_command_execute
       end

@@ -92,6 +92,12 @@ RSpec.describe Commander do
           parse_command
         end
 
+        it 'outputs a message' do
+          expect(STDOUT).to receive(:puts).with("Invalid PLACE command - expected arguments: PLACE X,Y,DIRECTION")
+
+          parse_command
+        end
+
         it 'returns nil' do
           expect(parse_command).to be_nil
         end
@@ -133,6 +139,12 @@ RSpec.describe Commander do
     context 'when the command is invalid' do
       let(:command_string) { 'INVALID' }
 
+      it 'outputs a message' do
+        expect(STDOUT).to receive(:puts).with("Invalid command: #{command_string}")
+
+        parse_command
+      end
+
       it 'returns nil' do
         expect(parse_command).to be_nil
       end
@@ -159,6 +171,12 @@ RSpec.describe Commander do
         context 'when the direction argument is invalid' do
           let(:direction) { 'INVALID' }
 
+          it 'outputs a message' do
+            expect(STDOUT).to receive(:puts).with("Invalid direction argument: #{direction}")
+            
+            valid_place_args?
+          end
+
           it 'returns false' do
             expect(valid_place_args?).to be false
           end
@@ -168,6 +186,12 @@ RSpec.describe Commander do
       context 'when the y argument is invalid' do
         let(:y) { 'INVALID' }
         let(:direction) { 'NORTH' }
+
+        it 'outputs a message' do
+          expect(STDOUT).to receive(:puts).with("Invalid y argument: #{y}")
+
+          valid_place_args?
+        end
 
         it 'returns false' do
           expect(valid_place_args?).to be false
@@ -179,6 +203,12 @@ RSpec.describe Commander do
       let(:x) { 'INVALID' }
       let(:y) { '0' }
       let(:direction) { 'NORTH' }
+
+      it 'outputs a message' do
+        expect(STDOUT).to receive(:puts).with("Invalid x argument: #{x}")
+
+        valid_place_args?
+      end
 
       it 'returns false' do
         expect(valid_place_args?).to be false

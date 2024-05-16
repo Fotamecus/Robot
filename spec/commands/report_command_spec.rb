@@ -25,9 +25,9 @@ RSpec.describe Commands::ReportCommand do
 
     context 'when the robot is not placed' do
       before { allow(robot).to receive(:placed?).and_return(false) }
-      
-      it 'does not report the robot position' do
-        expect(STDOUT).not_to receive(:puts)
+
+      it 'reports an error' do
+        expect(STDOUT).to receive(:puts).with('Robot has not been placed')
 
         report_command_execute
       end
